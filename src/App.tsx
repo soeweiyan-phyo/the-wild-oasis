@@ -19,8 +19,14 @@ export const App = () => {
             <Heading as="h1">The Wild Oasis</Heading>
             <div>
               <Heading as="h2">Check In and Check Out</Heading>
-              <Button>Check In</Button>
-              <Button>Check Out</Button>
+              <Button onClick={() => alert('Check In')}>Check In</Button>
+              <Button
+                $variation="secondary"
+                $size="small"
+                onClick={() => alert('Check Out')}
+              >
+                Check Out
+              </Button>
             </div>
           </Row>
 

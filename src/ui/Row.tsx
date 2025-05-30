@@ -10,15 +10,17 @@ export const Row = styled.div.attrs<RowProps>(({ type = 'vertical' }) => ({
 }))<RowProps>`
   display: flex;
 
+  // ! non-null assertion used
+  // * because we have default values
   ${({ type }) =>
-    type === 'horizontal' &&
+    type! === 'horizontal' &&
     css`
       align-items: center;
       justify-content: space-between;
     `}
 
   ${({ type }) =>
-    type === 'vertical' &&
+    type! === 'vertical' &&
     css`
       flex-direction: column;
       gap: 1.6rem;

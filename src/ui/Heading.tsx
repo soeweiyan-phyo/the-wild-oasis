@@ -1,7 +1,7 @@
 import styled, { css } from 'styled-components'
 
 interface HeadingProps {
-  as?: 'h1' | 'h2' | 'h3'
+  as: 'h1' | 'h2' | 'h3'
 }
 
 export const Heading = styled.h1<HeadingProps>`
