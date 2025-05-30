@@ -1,25 +1,13 @@
-/*
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
-  rel="stylesheet"
-/>
-<link
-  href="https://fonts.googleapis.com/css2?family=Sono:wght@400;500;600&display=swap"
-  rel="stylesheet"
-/>
-*/
+import { createGlobalStyle } from 'styled-components'
 
-/* Colors adapted from https://tailwindcss.com/docs/customizing-colors */
-
+export const GlobalStyles = createGlobalStyle`
 :root {
   /* Indigo */
   --color-brand-50: #eef2ff;
   --color-brand-100: #e0e7ff;
   --color-brand-200: #c7d2fe;
   --color-brand-500: #6366f1;
-  --color-brand-600: #4f46e5;
+  --color-brand-600: #4f46e5;   
   --color-brand-700: #4338ca;
   --color-brand-800: #3730a3;
   --color-brand-900: #312e81;
@@ -194,3 +182,4 @@ FOR DARK MODE
 --image-grayscale: 10%;
 --image-opacity: 90%;
 */
+`

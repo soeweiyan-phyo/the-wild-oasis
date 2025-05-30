@@ -4,7 +4,36 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Vite + React</title>
+
+    <!-- TODO: understand more about these link tags -->
+    <!-- Preconnect to required origins -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Preload the main font files -->
+    <link
+      rel="preload"
+      as="style"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sono:wght@400;500;600&display=swap"
+    />
+
+    <!-- Load the fonts with media print trick -->
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sono:wght@400;500;600&display=swap"
+      media="print"
+      onload="this.media='all'"
+    />
+
+    <!-- Fallback for no-JS -->
+    <noscript>
+      <link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Sono:wght@400;500;600&display=swap"
+      />
+    </noscript>
+
+    <title>The Wild Oasis</title>
   </head>
   <body>
     <div id="root"></div>
