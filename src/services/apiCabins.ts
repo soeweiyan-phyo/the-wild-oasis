@@ -26,6 +26,7 @@ export const createOrEditCabin = async (
   id?: number
 ): Promise<Cabin> => {
   // Upload image
+  // Check if image is in supabase
   const hasImagePath =
     typeof newCabin.image === 'string' && newCabin.image.startsWith(supabaseUrl)
 
@@ -35,15 +36,18 @@ export const createOrEditCabin = async (
     ? newCabin.image
     : `${supabaseUrl}/storage/v1/object/public/cabins//${imageName}`
 
-  const { error: storageError } = await supabase.storage
-    .from('cabins')
-    .upload(imageName, newCabin.image)
+  // Upload image if it is not in supabase
+  if (!hasImagePath) {
+    const { error: storageError } = await supabase.storage
+      .from('cabins')
+      .upload(imageName, newCabin.image)
 
-  if (storageError) {
-    console.error(storageError)
-    throw new Error(
-      'Cabin image could not be uploaded and cabin was not created'
-    )
+    if (storageError) {
+      console.error(storageError)
+      throw new Error(
+        'Cabin image could not be uploaded and cabin was not created'
+      )
+    }
   }
 
   // Create or edit cabin
