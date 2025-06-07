@@ -31,12 +31,12 @@ const TableHeader = styled.header`
 `
 
 export function CabinTable() {
-  const { isLoading, data: cabins } = useQuery({
+  const { isPending, data: cabins } = useQuery({
     queryKey: [QueryKey.Cabins],
     queryFn: getCabins,
   })
 
-  if (isLoading) return <Spinner />
+  if (isPending) return <Spinner />
 
   return (
     <Table role="table">
@@ -49,7 +49,7 @@ export function CabinTable() {
         <div></div>
       </TableHeader>
 
-      {cabins?.map(cabin => (
+      {cabins?.map((cabin) => (
         <CabinRow
           key={cabin.id}
           cabin={cabin}
