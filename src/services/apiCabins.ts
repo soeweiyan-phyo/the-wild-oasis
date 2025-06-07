@@ -1,18 +1,9 @@
 import { supabase } from './supabase'
 
-export interface Cabin {
-  id: number
-  created_at: string
-  name: string
-  maxCapacity: number
-  regularPrice: number
-  discount: number
-  description: string
-  image: string
-}
+import { SupabaseTable, type Cabin } from '@/utils/type'
 
 export const getCabins = async (): Promise<Cabin[]> => {
-  const { data, error } = await supabase.from('cabins').select('*')
+  const { data, error } = await supabase.from(SupabaseTable.Cabins).select('*')
 
   if (error) {
     console.error(error)
@@ -20,4 +11,16 @@ export const getCabins = async (): Promise<Cabin[]> => {
   }
 
   return data
+}
+
+export const deleteCabin = async (id: number) => {
+  const { error } = await supabase
+    .from(SupabaseTable.Cabins)
+    .delete()
+    .eq('id', id)
+
+  if (error) {
+    console.error(error)
+    throw new Error('Cabin could not be deleted')
+  }
 }
