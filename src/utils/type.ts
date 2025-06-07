@@ -25,3 +25,7 @@ export interface Cabin {
   description: string
   image: string
 }
+
+export type CabinFormData = Omit<Cabin, 'id' | 'created_at' | 'image'> & {
+  image: string | File
+}

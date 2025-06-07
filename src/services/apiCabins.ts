@@ -1,6 +1,6 @@
 import { supabase, supabaseUrl } from './supabase'
 
-import { SupabaseTable, type Cabin } from '@/utils/type'
+import { SupabaseTable, type Cabin, type CabinFormData } from '@/utils/type'
 
 // TODO: validate api responses
 
@@ -19,15 +19,21 @@ export const getCabins = async (): Promise<Cabin[]> => {
 }
 
 /**
- * Create a new cabin in the database
+ * Create a new cabin or edit an existing cabin in the database
  */
-export const createCabin = async (
-  newCabin: Omit<Cabin, 'id' | 'created_at' | 'image'> & { image: File }
-): Promise<Cabin[]> => {
+export const createOrEditCabin = async (
+  newCabin: CabinFormData,
+  id?: number
+): Promise<Cabin> => {
   // Upload image
+  const hasImagePath =
+    typeof newCabin.image === 'string' && newCabin.image.startsWith(supabaseUrl)
+
   // Replace forward slashes so that new directories are not created
   const imageName = `${Math.random()}-${newCabin.name}`.replace(/\//g, '-')
-  const imageUrl = `${supabaseUrl}/storage/v1/object/public/cabins//${imageName}`
+  const imageUrl = hasImagePath
+    ? newCabin.image
+    : `${supabaseUrl}/storage/v1/object/public/cabins//${imageName}`
 
   const { error: storageError } = await supabase.storage
     .from('cabins')
@@ -40,24 +46,46 @@ export const createCabin = async (
     )
   }
 
+  // Create or edit cabin
+  let query
+
+  const cabinData = {
+    name: newCabin.name,
+    maxCapacity: newCabin.maxCapacity,
+    regularPrice: newCabin.regularPrice,
+    discount: newCabin.discount,
+    description: newCabin.description,
+    image: imageUrl,
+  }
+
   // Create cabin
-  const { data, error } = await supabase
-    .from('cabins')
-    .insert([
-      {
-        name: newCabin.name,
-        maxCapacity: newCabin.maxCapacity,
-        regularPrice: newCabin.regularPrice,
-        discount: newCabin.discount,
-        description: newCabin.description,
-        image: imageUrl,
-      },
-    ])
-    .select()
+  if (!id) {
+    query = supabase
+      .from(SupabaseTable.Cabins)
+      .insert([cabinData])
+      .select()
+      .single()
+  }
+
+  // Edit cabin
+  if (id) {
+    query = supabase
+      .from(SupabaseTable.Cabins)
+      .update(cabinData)
+      .eq('id', id)
+      .select()
+      .single()
+  }
+
+  if (!query) {
+    throw new Error('Cabin could not be created or edited')
+  }
+
+  const { data, error } = await query
 
   if (error) {
     console.error(error)
-    throw new Error('Cabin could not be created')
+    throw new Error('Cabin could not be created or edited')
   }
 
   return data
