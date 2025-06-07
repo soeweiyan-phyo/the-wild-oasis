@@ -1,4 +1,4 @@
-import { supabase } from './supabase'
+import { supabase, supabaseUrl } from './supabase'
 
 import { SupabaseTable, type Cabin } from '@/utils/type'
 
@@ -22,8 +22,25 @@ export const getCabins = async (): Promise<Cabin[]> => {
  * Create a new cabin in the database
  */
 export const createCabin = async (
-  newCabin: Omit<Cabin, 'id' | 'created_at' | 'image'>
+  newCabin: Omit<Cabin, 'id' | 'created_at' | 'image'> & { image: File }
 ): Promise<Cabin[]> => {
+  // Upload image
+  // Replace forward slashes so that new directories are not created
+  const imageName = `${Math.random()}-${newCabin.name}`.replace(/\//g, '-')
+  const imageUrl = `${supabaseUrl}/storage/v1/object/public/cabins//${imageName}`
+
+  const { error: storageError } = await supabase.storage
+    .from('cabins')
+    .upload(imageName, newCabin.image)
+
+  if (storageError) {
+    console.error(storageError)
+    throw new Error(
+      'Cabin image could not be uploaded and cabin was not created'
+    )
+  }
+
+  // Create cabin
   const { data, error } = await supabase
     .from('cabins')
     .insert([
@@ -33,7 +50,7 @@ export const createCabin = async (
         regularPrice: newCabin.regularPrice,
         discount: newCabin.discount,
         description: newCabin.description,
-        image: null,
+        image: imageUrl,
       },
     ])
     .select()

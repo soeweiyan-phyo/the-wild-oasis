@@ -1,4 +1,3 @@
-import styled from 'styled-components'
 import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
@@ -12,7 +11,7 @@ import { Textarea } from '@/ui/Textarea'
 import { createCabin } from '@/services/apiCabins'
 import { FormRow } from '@/ui/FormRow'
 
-type FormInputs = Omit<Cabin, 'id' | 'created_at' | 'image'>
+type FormInputs = Omit<Cabin, 'id' | 'created_at' | 'image'> & { image: File[] }
 
 enum FormFields {
   NAME = 'name',
@@ -48,8 +47,15 @@ export function CreateCabinForm() {
     formState: { errors },
   } = useForm<FormInputs>()
 
-  function onSubmit(data: FormInputs) {
-    mutate(data)
+  const onSubmit = (data: FormInputs) => {
+    // * Image has required validation
+    const image = data.image[0]
+    if (!image) return
+
+    mutate({
+      ...data,
+      image,
+    })
   }
 
   return (
@@ -147,6 +153,9 @@ export function CreateCabinForm() {
           id={FormFields.IMAGE}
           accept="image/*"
           disabled={isCreating}
+          {...register(FormFields.IMAGE, {
+            required: 'This field is required',
+          })}
         />
       </FormRow>
 
