@@ -1,9 +1,14 @@
-// Supabase tables
+// Supabase
 export enum SupabaseTable {
   Cabins = 'cabins',
   Bookings = 'bookings',
   Guests = 'guests',
   Settings = 'settings',
+}
+
+export enum SupabaseBucket {
+  Cabins = 'cabins',
+  Avatars = 'avatars',
 }
 
 // React query keys

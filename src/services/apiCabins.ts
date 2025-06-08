@@ -1,6 +1,11 @@
 import { supabase, supabaseUrl } from './supabase'
 
-import { SupabaseTable, type Cabin, type CabinFormData } from '@/utils/type'
+import {
+  SupabaseTable,
+  SupabaseBucket,
+  type Cabin,
+  type CabinFormData,
+} from '@/utils/type'
 
 // TODO: validate api responses
 
@@ -39,7 +44,7 @@ export const createOrUpdateCabin = async (
   // Upload image if it is not in supabase
   if (!hasImagePath) {
     const { error: storageError } = await supabase.storage
-      .from('cabins')
+      .from(SupabaseBucket.Cabins)
       .upload(imageName, newCabin.image)
 
     if (storageError) {
