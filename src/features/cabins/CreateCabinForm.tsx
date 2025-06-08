@@ -1,6 +1,4 @@
 import { useForm } from 'react-hook-form'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import toast from 'react-hot-toast'
 
 import { Input } from '@/ui/Input'
 import { Form } from '@/ui/Form'
@@ -9,8 +7,10 @@ import { FileInput } from '@/ui/FileInput'
 import { Textarea } from '@/ui/Textarea'
 import { FormRow } from '@/ui/FormRow'
 
-import { createOrEditCabin } from '@/services/apiCabins'
-import { QueryKey, type Cabin, type CabinFormData } from '@/utils/type'
+import { useCreateCabin } from './useCreateCabin'
+import { useEditCabin } from './useEditCabin'
+
+import { type Cabin } from '@/utils/type'
 
 type FormInputs = Omit<Cabin, 'id' | 'created_at' | 'image'> & {
   image: File[] | string
@@ -34,39 +34,8 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
 
   const isEditSession = Boolean(cabinToEdit?.id)
 
-  const queryClient = useQueryClient()
-
-  // Create cabin
-  const { isPending: isCreating, mutate: createCabin } = useMutation({
-    mutationFn: createOrEditCabin,
-    onSuccess: () => {
-      toast.success('Cabin created successfully')
-      queryClient.invalidateQueries({
-        queryKey: [QueryKey.Cabins],
-      })
-      reset()
-    },
-    onError: (error) => {
-      toast.error(error?.message)
-    },
-  })
-
-  // Edit cabin
-  const { isPending: isEditing, mutate: editCabin } = useMutation({
-    mutationFn: ({ cabinData, id }: { cabinData: CabinFormData; id: number }) =>
-      createOrEditCabin(cabinData, id),
-    onSuccess: () => {
-      toast.success('Cabin edited successfully')
-      queryClient.invalidateQueries({
-        queryKey: [QueryKey.Cabins],
-      })
-      // TODO: do I need to reset?
-      reset()
-    },
-    onError: (error) => {
-      toast.error(error?.message)
-    },
-  })
+  const { isCreating, createCabin } = useCreateCabin()
+  const { isEditing, editCabin } = useEditCabin()
 
   const isWorking = isCreating || isEditing
 
@@ -99,20 +68,26 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
 
     // Edit cabin - image is url
     if (isEditSession && cabinToEdit && typeof image === 'string') {
-      editCabin({
-        cabinData: {
-          ...data,
-          image,
+      editCabin(
+        {
+          cabinData: { ...data, image },
+          id: cabinToEdit.id!,
         },
-        id: cabinToEdit.id!,
-      })
+        {
+          // Reset form with edited data
+          onSuccess: (data) => reset(data),
+        }
+      )
     }
     // Create cabin - image is file
     else {
-      createCabin({
-        ...data,
-        image,
-      })
+      createCabin(
+        { ...data, image },
+        {
+          // Reset form
+          onSuccess: () => reset(),
+        }
+      )
     }
   }
 
@@ -195,8 +170,6 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
         error={errors.description?.message}
       >
         <Textarea
-          // TODO: there might be some use later
-          // type="number"
           defaultValue=""
           id={FormFields.DESCRIPTION}
           disabled={isWorking}
