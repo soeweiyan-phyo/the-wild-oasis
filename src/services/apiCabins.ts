@@ -21,7 +21,7 @@ export const getCabins = async (): Promise<Cabin[]> => {
 /**
  * Create a new cabin or edit an existing cabin in the database
  */
-export const createOrEditCabin = async (
+export const createOrUpdateCabin = async (
   newCabin: CabinFormData,
   id?: number
 ): Promise<Cabin> => {

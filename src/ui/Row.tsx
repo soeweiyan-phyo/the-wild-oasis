@@ -10,8 +10,7 @@ export const Row = styled.div.attrs<RowProps>(({ type = 'vertical' }) => ({
 }))<RowProps>`
   display: flex;
 
-  // ! non-null assertion used
-  // * because we have default values
+  // ! non-null assertion used because we have default values
   ${({ type }) =>
     type! === 'horizontal' &&
     css`

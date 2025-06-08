@@ -8,7 +8,7 @@ import { Textarea } from '@/ui/Textarea'
 import { FormRow } from '@/ui/FormRow'
 
 import { useCreateCabin } from './useCreateCabin'
-import { useEditCabin } from './useEditCabin'
+import { useUpdateCabin } from './useUpdateCabin'
 
 import { type Cabin } from '@/utils/type'
 
@@ -35,9 +35,9 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
   const isEditSession = Boolean(cabinToEdit?.id)
 
   const { isCreating, createCabin } = useCreateCabin()
-  const { isEditing, editCabin } = useEditCabin()
+  const { isUpdating, updateCabin } = useUpdateCabin()
 
-  const isWorking = isCreating || isEditing
+  const isWorking = isCreating || isUpdating
 
   // Form
   const {
@@ -68,7 +68,7 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
 
     // Edit cabin - image is url
     if (isEditSession && cabinToEdit && typeof image === 'string') {
-      editCabin(
+      updateCabin(
         {
           cabinData: { ...data, image },
           id: cabinToEdit.id!,

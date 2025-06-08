@@ -29,3 +29,12 @@ export interface Cabin {
 export type CabinFormData = Omit<Cabin, 'id' | 'created_at' | 'image'> & {
   image: string | File
 }
+
+export interface Setting {
+  id: number
+  created_at: string
+  minBookingLength: number
+  maxBookingLength: number
+  maxGuestsPerBooking: number
+  breakfastPrice: number
+}
