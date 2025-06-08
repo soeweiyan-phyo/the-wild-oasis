@@ -5,22 +5,22 @@ interface HeadingProps {
 }
 
 export const Heading = styled.h1<HeadingProps>`
-  ${({ as }) =>
-    as === 'h1' &&
+  ${(props) =>
+    props.as === 'h1' &&
     css`
       font-size: 3rem;
       font-weight: 600;
     `}
 
-  ${({ as }) =>
-    as === 'h2' &&
+  ${(props) =>
+    props.as === 'h2' &&
     css`
       font-size: 2rem;
       font-weight: 600;
     `}
 
-  ${({ as }) =>
-    as === 'h3' &&
+  ${(props) =>
+    props.as === 'h3' &&
     css`
       font-size: 2rem;
       font-weight: 500;

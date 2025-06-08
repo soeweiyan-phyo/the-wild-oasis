@@ -27,10 +27,11 @@ enum FormFields {
 
 export interface CreateCabinFormProps {
   cabinToEdit?: Cabin
+  onCloseModal?: () => void
 }
 
 export function CreateCabinForm(props: CreateCabinFormProps) {
-  const { cabinToEdit } = props
+  const { cabinToEdit, onCloseModal } = props
 
   const isEditSession = Boolean(cabinToEdit?.id)
 
@@ -75,7 +76,10 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
         },
         {
           // Reset form with edited data
-          onSuccess: (data) => reset(data),
+          onSuccess: (data) => {
+            reset(data)
+            onCloseModal?.()
+          },
         }
       )
     }
@@ -85,14 +89,20 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
         { ...data, image },
         {
           // Reset form
-          onSuccess: () => reset(),
+          onSuccess: () => {
+            reset()
+            onCloseModal?.()
+          },
         }
       )
     }
   }
 
   return (
-    <Form onSubmit={handleSubmit(onSubmit)}>
+    <Form
+      onSubmit={handleSubmit(onSubmit)}
+      $type={onCloseModal ? 'modal' : 'default'}
+    >
       <FormRow
         label="Cabin name"
         error={errors.name?.message}
@@ -197,6 +207,7 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
         <Button
           $variation="secondary"
           type="reset"
+          onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>

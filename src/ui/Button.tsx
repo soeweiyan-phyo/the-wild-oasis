@@ -53,18 +53,16 @@ interface ButtonProps {
   $variation?: keyof typeof variations
 }
 
-export const Button = styled.button.attrs<ButtonProps>(
-  ({ $size = 'medium', $variation = 'primary' }) => ({
-    $size,
-    $variation,
-  })
-)<ButtonProps>`
+export const Button = styled.button.attrs<ButtonProps>((props) => ({
+  $size: props.$size ?? 'medium',
+  $variation: props.$variation ?? 'primary',
+}))<ButtonProps>`
   border: none;
   border-radius: var(--border-radius-sm);
   box-shadow: var(--shadow-sm);
 
   // ! non-null assertion used
   // * because we have default values
-  ${({ $size }) => sizes[$size!]}
-  ${({ $variation }) => variations[$variation!]}
+  ${(props) => sizes[props.$size!]}
+  ${(props) => variations[props.$variation!]}
 `

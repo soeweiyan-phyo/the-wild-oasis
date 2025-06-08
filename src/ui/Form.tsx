@@ -1,13 +1,14 @@
 import styled, { css } from 'styled-components'
 
 interface FormProps {
-  // TODO: this could be a boolean
-  $type?: 'modal'
+  $type?: 'modal' | 'default'
 }
 
-export const Form = styled.form<FormProps>`
+export const Form = styled.form.attrs<FormProps>((props) => ({
+  $type: props.$type ?? 'default',
+}))<FormProps>`
   ${(props) =>
-    props.$type !== 'modal' &&
+    props.$type === 'default' &&
     css`
       padding: 2.4rem 4rem;
 
