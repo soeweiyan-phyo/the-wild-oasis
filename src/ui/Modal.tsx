@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 import { cloneElement, createContext, useContext, useState } from 'react'
+import { createPortal } from 'react-dom'
+
 import { HiXMark } from 'react-icons/hi2'
 
 import type { ModalWindows } from '@/utils/type'
-import { createPortal } from 'react-dom'
+import { useClickOutside } from '@/hooks/useClickOutside'
 
 const StyledModal = styled.div`
   position: fixed;
@@ -54,7 +56,6 @@ const Button = styled.button`
   }
 `
 
-// Modal context
 type ModalContextType = {
   openWindow: ModalWindows | ''
   open: (window: ModalWindows) => void
@@ -95,7 +96,7 @@ function Open(props: {
 }): React.ReactElement<React.ButtonHTMLAttributes<HTMLButtonElement>> {
   const { window, children } = props
   const { open } = useContext(ModalContext)
-  // Override props of children
+  // * Override props of children
   return cloneElement(children, { onClick: () => open(window) })
 }
 
@@ -104,20 +105,25 @@ function Open(props: {
  * open window. It uses React.createPortal to render the modal content outside
  * of the normal DOM hierarchy.
  */
-function Window(props: { name: ModalWindows; children: React.ReactNode }) {
+function Window(props: {
+  name: ModalWindows
+  children: React.ReactElement<{ onCloseModal: () => void }>
+}) {
   const { name, children } = props
   const { openWindow, close } = useContext(ModalContext)
+
+  const ref = useClickOutside<HTMLDivElement>(close)
 
   if (openWindow !== name) return null
 
   return createPortal(
     <Overlay>
-      <StyledModal>
+      <StyledModal ref={ref}>
         <Button onClick={close}>
           <HiXMark />
         </Button>
 
-        <div>{children}</div>
+        <div>{cloneElement(children, { onCloseModal: close })}</div>
       </StyledModal>
     </Overlay>,
     document.body
