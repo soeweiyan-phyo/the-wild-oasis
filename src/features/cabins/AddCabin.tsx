@@ -9,13 +9,15 @@ import { ModalWindows } from '@/utils/type'
  */
 export function AddCabin() {
   return (
-    <Modal>
-      <Modal.Open window={ModalWindows.CabinForm}>
-        <Button>Create a new cabin</Button>
-      </Modal.Open>
-      <Modal.Window name={ModalWindows.CabinForm}>
-        <CreateCabinForm />
-      </Modal.Window>
-    </Modal>
+    <div>
+      <Modal>
+        <Modal.Open window={ModalWindows.CabinForm}>
+          <Button>Create a new cabin</Button>
+        </Modal.Open>
+        <Modal.Window name={ModalWindows.CabinForm}>
+          <CreateCabinForm />
+        </Modal.Window>
+      </Modal>
+    </div>
   )
 }

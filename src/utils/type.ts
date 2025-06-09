@@ -39,4 +39,5 @@ export interface Setting {
 // Modal
 export const enum ModalWindows {
   CabinForm = 'cabin-form',
+  ConfirmDelete = 'confirm-delete',
 }
