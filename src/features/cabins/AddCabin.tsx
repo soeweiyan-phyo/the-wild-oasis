@@ -1,23 +1,21 @@
-import { useState } from 'react'
-import { createPortal } from 'react-dom'
-
 import { Button } from '@/ui/Button'
 import { Modal } from '@/ui/Modal'
-
 import { CreateCabinForm } from './CreateCabinForm'
 
-export function AddCabin() {
-  const [isOpenModal, setIsOpenModal] = useState(false)
+import { ModalWindows } from '@/utils/type'
 
-  return createPortal(
-    <div>
-      <Button onClick={() => setIsOpenModal(true)}>Create a new cabin</Button>
-      {isOpenModal && (
-        <Modal onClose={() => setIsOpenModal(false)}>
-          <CreateCabinForm onCloseModal={() => setIsOpenModal(false)} />
-        </Modal>
-      )}
-    </div>,
-    document.body
+/**
+ * A component that displays a modal window for adding a new cabin.
+ */
+export function AddCabin() {
+  return (
+    <Modal>
+      <Modal.Open window={ModalWindows.CabinForm}>
+        <Button>Create a new cabin</Button>
+      </Modal.Open>
+      <Modal.Window name={ModalWindows.CabinForm}>
+        <CreateCabinForm />
+      </Modal.Window>
+    </Modal>
   )
 }

@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { QueryKey } from '@/utils/type'
+import { SupabaseTable } from '@/utils/type'
 import { getCabins } from '@/services/apiCabins'
 
 export function useCabins() {
   const { isLoading, data: cabins } = useQuery({
-    queryKey: [QueryKey.Cabins],
+    queryKey: [SupabaseTable.Cabins],
     queryFn: getCabins,
   })
 

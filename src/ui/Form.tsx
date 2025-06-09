@@ -7,7 +7,7 @@ interface FormProps {
 export const Form = styled.form.attrs<FormProps>((props) => ({
   $type: props.$type ?? 'default',
 }))<FormProps>`
-  ${(props) =>
+  ${(props: FormProps) =>
     props.$type === 'default' &&
     css`
       padding: 2.4rem 4rem;
@@ -18,7 +18,7 @@ export const Form = styled.form.attrs<FormProps>((props) => ({
       border-radius: var(--border-radius-md);
     `}
 
-  ${(props) =>
+  ${(props: FormProps) =>
     props.$type === 'modal' &&
     css`
       width: 80rem;

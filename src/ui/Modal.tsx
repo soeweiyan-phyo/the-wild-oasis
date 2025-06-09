@@ -1,5 +1,9 @@
-import { HiXMark } from 'react-icons/hi2'
 import styled from 'styled-components'
+import { cloneElement, createContext, useContext, useState } from 'react'
+import { HiXMark } from 'react-icons/hi2'
+
+import type { ModalWindows } from '@/utils/type'
+import { createPortal } from 'react-dom'
 
 const StyledModal = styled.div`
   position: fixed;
@@ -50,24 +54,79 @@ const Button = styled.button`
   }
 `
 
-interface ModalProps {
-  onClose: () => void
-  children: React.ReactNode
+// Modal context
+type ModalContextType = {
+  openWindow: ModalWindows | ''
+  open: (window: ModalWindows) => void
+  close: () => void
 }
 
-export function Modal(props: ModalProps) {
-  const { onClose, children } = props
+const ModalContext = createContext<ModalContextType>({
+  openWindow: '',
+  open: () => {},
+  close: () => {},
+})
+
+/**
+ * A compound component that provides modal context to its children. It also
+ * manages the state of the currently open modal window.
+ */
+export function Modal(props: { children: React.ReactNode }) {
+  const { children } = props
+  const [openWindow, setOpenWindow] = useState<ModalWindows | ''>('')
+
+  const open = setOpenWindow
+  const close = () => setOpenWindow('')
 
   return (
-    <>
-      <Overlay>
-        <StyledModal>
-          <Button onClick={onClose}>
-            <HiXMark />
-          </Button>
-          {children}
-        </StyledModal>
-      </Overlay>
-    </>
+    <ModalContext.Provider value={{ openWindow, open, close }}>
+      {children}
+    </ModalContext.Provider>
   )
 }
+
+/**
+ * A component that wraps a button to control the visibility of a modal
+ * window. When clicked, it opens the specified modal window.
+ */
+function Open(props: {
+  window: ModalWindows
+  children: React.ReactElement<React.ButtonHTMLAttributes<HTMLButtonElement>>
+}): React.ReactElement<React.ButtonHTMLAttributes<HTMLButtonElement>> {
+  const { window, children } = props
+  const { open } = useContext(ModalContext)
+  // Override props of children
+  return cloneElement(children, { onClick: () => open(window) })
+}
+
+/**
+ * A component that displays a modal window when its name matches the currently
+ * open window. It uses React.createPortal to render the modal content outside
+ * of the normal DOM hierarchy.
+ */
+function Window(props: { name: ModalWindows; children: React.ReactNode }) {
+  const { name, children } = props
+  const { openWindow, close } = useContext(ModalContext)
+
+  if (openWindow !== name) return null
+
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button onClick={close}>
+          <HiXMark />
+        </Button>
+
+        <div>{children}</div>
+      </StyledModal>
+    </Overlay>,
+    document.body
+  )
+}
+
+Modal.Open = Open
+Modal.Window = Window
+
+// * For easier debugging
+Open.displayName = 'Modal.Open'
+Window.displayName = 'Modal.Window'

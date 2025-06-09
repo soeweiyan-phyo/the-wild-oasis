@@ -2,8 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import { createOrUpdateCabin } from '@/services/apiCabins'
-import { QueryKey, type CabinFormData } from '@/utils/type'
+import { SupabaseTable, type CabinFormData } from '@/utils/type'
 
+/**
+ * A hook that provides functionality for updating a cabin.
+ */
 export function useUpdateCabin() {
   const queryClient = useQueryClient()
 
@@ -13,7 +16,7 @@ export function useUpdateCabin() {
     onSuccess: () => {
       toast.success('Cabin successfully updated')
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.Cabins],
+        queryKey: [SupabaseTable.Cabins],
       })
     },
     onError: (error) => {

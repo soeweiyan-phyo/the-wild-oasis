@@ -1,22 +1,14 @@
 // Supabase
-export enum SupabaseTable {
+export const enum SupabaseTable {
   Cabins = 'cabins',
   Bookings = 'bookings',
   Guests = 'guests',
   Settings = 'settings',
 }
 
-export enum SupabaseBucket {
+export const enum SupabaseBucket {
   Cabins = 'cabins',
   Avatars = 'avatars',
-}
-
-// React query keys
-export enum QueryKey {
-  Cabins = SupabaseTable.Cabins,
-  Bookings = SupabaseTable.Bookings,
-  Guests = SupabaseTable.Guests,
-  Settings = SupabaseTable.Settings,
 }
 
 // API response
@@ -42,4 +34,9 @@ export interface Setting {
   maxBookingLength: number
   maxGuestsPerBooking: number
   breakfastPrice: number
+}
+
+// Modal
+export const enum ModalWindows {
+  CabinForm = 'cabin-form',
 }

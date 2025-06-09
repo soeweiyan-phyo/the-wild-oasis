@@ -30,6 +30,9 @@ export interface CreateCabinFormProps {
   onCloseModal?: () => void
 }
 
+/**
+ * A component that displays a form for creating or editing a cabin.
+ */
 export function CreateCabinForm(props: CreateCabinFormProps) {
   const { cabinToEdit, onCloseModal } = props
 
@@ -61,6 +64,11 @@ export function CreateCabinForm(props: CreateCabinFormProps) {
         : {},
   })
 
+  /**
+   * Handles form submission for creating or updating a cabin.
+   * - When editing, preserves the existing image if it's a URL
+   * - When creating, expects a file for the image
+   */
   const onSubmit = (data: FormInputs) => {
     // * Image has required validation
     // If editing, use the existing image

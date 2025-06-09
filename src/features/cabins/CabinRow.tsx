@@ -52,6 +52,10 @@ export interface CabinRowProps {
   cabin: Cabin
 }
 
+/**
+ * A component that displays a row for a cabin in a table and provides actions
+ * to edit, delete, and duplicate the cabin.
+ */
 export function CabinRow(props: CabinRowProps) {
   const { cabin } = props
 

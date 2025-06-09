@@ -63,6 +63,6 @@ export const Button = styled.button.attrs<ButtonProps>((props) => ({
 
   // ! non-null assertion used
   // * because we have default values
-  ${(props) => sizes[props.$size!]}
-  ${(props) => variations[props.$variation!]}
+  ${(props: ButtonProps) => sizes[props.$size!]}
+  ${(props: ButtonProps) => variations[props.$variation!]}
 `

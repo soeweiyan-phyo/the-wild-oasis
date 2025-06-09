@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import { updateSetting as updateSettingApi } from '@/services/apiSettings'
-import { QueryKey } from '@/utils/type'
+import { SupabaseTable } from '@/utils/type'
 
 export function useUpdateSetting() {
   const queryClient = useQueryClient()
@@ -12,7 +12,7 @@ export function useUpdateSetting() {
     onSuccess: () => {
       toast.success('Settings updated successfully')
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.Settings],
+        queryKey: [SupabaseTable.Settings],
       })
     },
     onError: (error) => {

@@ -2,8 +2,11 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
 import { deleteCabin as deleteCabinApi } from '@/services/apiCabins'
-import { QueryKey } from '@/utils/type'
+import { SupabaseTable } from '@/utils/type'
 
+/**
+ * A hook that provides functionality for deleting a cabin.
+ */
 export function useDeleteCabin() {
   const queryClient = useQueryClient()
 
@@ -12,7 +15,7 @@ export function useDeleteCabin() {
     onSuccess: () => {
       toast.success('Cabin deleted successfully')
       queryClient.invalidateQueries({
-        queryKey: [QueryKey.Cabins],
+        queryKey: [SupabaseTable.Cabins],
       })
     },
     onError: (error) => {
