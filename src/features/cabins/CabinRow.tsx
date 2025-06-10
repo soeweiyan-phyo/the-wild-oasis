@@ -2,6 +2,7 @@ import styled from 'styled-components'
 import { HiPencil, HiSquare2Stack, HiTrash } from 'react-icons/hi2'
 
 import { Modal } from '@/ui/Modal'
+import { Table } from '@/ui/Table'
 
 import { CreateCabinForm } from './CreateCabinForm'
 import { useDeleteCabin } from './useDeleteCabin'
@@ -10,18 +11,6 @@ import { useCreateCabin } from './useCreateCabin'
 import { formatCurrency } from '@/utils/helpers'
 import { ModalWindows, type Cabin } from '@/utils/type'
 import { ConfirmDelete } from '@/ui/ConfirmDelete'
-
-const TableRow = styled.div`
-  display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
-  column-gap: 2.4rem;
-  align-items: center;
-  padding: 1.4rem 2.4rem;
-
-  &:not(:last-child) {
-    border-bottom: 1px solid var(--color-grey-100);
-  }
-`
 
 const Img = styled.img`
   display: block;
@@ -80,7 +69,7 @@ export function CabinRow(props: CabinRowProps) {
 
   return (
     <>
-      <TableRow role="row">
+      <Table.Row>
         <Img src={image} />
         <Cabin>{name}</Cabin>
         <div>Fits up to {maxCapacity} guests</div>
@@ -121,7 +110,7 @@ export function CabinRow(props: CabinRowProps) {
             </Modal.Window>
           </Modal>
         </div>
-      </TableRow>
+      </Table.Row>
     </>
   )
 }
